@@ -12,6 +12,34 @@ class Login extends React.Component {
       isLoading: false,
     };
   }
+
+  handleChange = e => {
+    this.setState({
+      credentials: {
+        ...this.state.credentials,
+        [e.target.name]: e.target.value
+      },
+    });
+    console.log('credentials', this.state.credentials);
+  };
+
+  loginHandler = e => {
+    e.preventDefault();
+    this.setState({
+      isLoading: true,
+    });
+    axios 
+      .post('http://localhost:5000/api/login', this.state.credentials)
+      .then(res => {
+        localStorage.setItem('token', JSON.stringify(res.data.payload));
+        this.props.history.push('/bubblepage');
+        this.setState({
+          isLoading: false,
+        });
+      })
+      .catch(err => console.log({err}));
+  };
+
   render() {
     return (
       <>
